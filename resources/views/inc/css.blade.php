@@ -17,5 +17,6 @@
     <!-- Include DataTables CSS -->
     <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="{{ asset('app-assets/assets/vendor/js/helpers.js') }}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <script src="{{ asset('app-assets/assets/js/config.js') }}"></script> 
