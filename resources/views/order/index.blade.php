@@ -26,14 +26,12 @@
                                 <tr>
                                     <td>{{ $order->id }}</td>
 
-                                    <!-- Displaying product image with fixed small size -->
                                     <td>
                                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                                             class="small-product-image">
                                         <span>{{ $product->name }}</span>
                                     </td>
 
-                                    <!-- Making brand clickable -->
                                     <td>
                                         <a href="{{ route('brands.show', $product->brand->id) }}">
                                             {{ $product->brand->name }}
@@ -68,12 +66,8 @@
 <style>
     .small-product-image {
         width: 50px;
-        /* Small fixed width */
         height: 50px;
-        /* Small fixed height */
         object-fit: cover;
-        /* Ensure image doesn't distort */
         border-radius: 4px;
-        /* Optional: rounded corners */
     }
 </style>

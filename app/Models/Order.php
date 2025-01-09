@@ -15,7 +15,6 @@ class Order extends Model
 {
     return $this->belongsToMany(Product::class, 'order_product')->withPivot('quantity', 'total_price', 'brand_id','store_id',"state");
 }
-  // Relationship with the Store model via store_id in the pivot table
   public function store()
   {
       return $this->belongsTo(Store::class, 'store_id');

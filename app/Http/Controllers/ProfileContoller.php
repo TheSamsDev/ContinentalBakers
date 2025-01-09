@@ -78,12 +78,10 @@ class ProfileContoller extends Controller
     {
         $user = Auth::user();
     
-        // Ensure only the authenticated user can update their profile
         if ($user->id != $id) {
             abort(403, 'Unauthorized action.');
         }
     
-        // Validate the input
         $request->validate([
             'first_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -95,7 +93,6 @@ class ProfileContoller extends Controller
             'language' => 'nullable|string|max:5',
         ]);
     
-        // Update user data
         $user->name = $request->input('first_name');
         $user->email = $request->input('email');
         $user->phone = $request->input('phone', $user->phone);
@@ -104,7 +101,6 @@ class ProfileContoller extends Controller
         $user->zip_code = $request->input('zip_code', $user->zip_code);
         $user->language = $request->input('language', $user->language);
     
-        // Handle avatar upload
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $avatarPath;

@@ -143,7 +143,6 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
         $('#storesTable').DataTable();
     });
 </script>

@@ -19,8 +19,8 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles = Role::with('permissions')->get(); // Load roles with permissions
-        $permissions = Permission::all(); // Get all permissions
+        $roles = Role::with('permissions')->get(); 
+        $permissions = Permission::all(); 
         return view('role.index', compact('roles', 'permissions'));
     }
 
@@ -29,7 +29,7 @@ class RoleController extends Controller
         $request->validate(['name' => 'required|unique:roles,name']);
         $role = Role::create(['name' => $request->name]);
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions); // Sync permissions
+            $role->syncPermissions($request->permissions); 
         }
         return redirect()->route('roles.index')->with('success', 'Role added successfully.');
     }
@@ -40,7 +40,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->update(['name' => $request->name]);
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions); // Sync permissions
+            $role->syncPermissions($request->permissions);
         }
         return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }

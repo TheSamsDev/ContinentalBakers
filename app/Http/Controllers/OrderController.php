@@ -19,19 +19,17 @@ class OrderController extends Controller
     
         $product = Product::findOrFail($request->product_id);
         
-        // Create an order entry
         $order = Order::create([
             'user_id' => auth()->id(),
             'status' => 'confirmed',
         ]);
     
-        // Attach the product with additional pivot data (state, store_id)
         $order->products()->attach($request->product_id, [
             'brand_id' => $product->brand_id,
             'quantity' => $request->quantity,
             'total_price' => $product->price * $request->quantity,
-            'store_id' => $request->store_id,  // Storing store_id in pivot
-            'state' => $request->state,  // Storing state in pivot
+            'store_id' => $request->store_id, 
+            'state' => $request->state, 
             'order_date' => now(),
         ]);
     
@@ -41,13 +39,9 @@ class OrderController extends Controller
 
     public function index()
     {
-        // Check if the user is a super admin
         if (auth()->user()->hasRole('SuperAdmin')) {
-            // Super admin can see all orders
             $orders = Order::with('products.brand')->get();
-            // dd($orders);
         } else {
-            // Regular user can only see their own orders
             $orders = auth()->user()->orders()->with('products.brand')->get();
         }
 

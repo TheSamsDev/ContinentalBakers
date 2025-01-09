@@ -24,8 +24,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('stores', StoreController::class);
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/brands/{id}', [BrandController::class, 'show'])->name('brands.show');
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store'); // Place an order
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); // Order history
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store'); 
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
 
 });
 

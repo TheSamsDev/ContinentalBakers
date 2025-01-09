@@ -66,7 +66,7 @@ class StoresSeeder extends Seeder
                 'name' => $data[0],
                 'address' => $data[1],
                 'mainaddress' => $data[2],
-                'user_id' => User::inRandomOrder()->first()->id, // Assign random user_id
+                'user_id' => User::inRandomOrder()->first()->id, 
             ]);
         }
     }
