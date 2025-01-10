@@ -18,6 +18,7 @@ class CreateStoresTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('mainaddress');
+          
             $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Assumes you're using the default 'users' table
             $table->timestamps();
         });

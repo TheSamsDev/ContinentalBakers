@@ -44,6 +44,8 @@ class StoreController extends Controller
         'name' => $request->name,
         'address' => $request->address,
         'mainaddress' => $request->mainaddress, 
+        'latitude' => $request->latitude, 
+        'longitude' => $request->longitude, 
         'user_id' => auth()->id(),  
     ]);
 

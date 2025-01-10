@@ -9,7 +9,7 @@ class Store extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'address', 'mainaddress', 'user_id'];
+    protected $fillable = ['name', 'address', 'mainaddress', 'user_id','longitude','latitude'];
 
     // Define the relationship with User model
     public function user()
