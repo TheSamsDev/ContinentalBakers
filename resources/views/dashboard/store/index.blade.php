@@ -33,6 +33,7 @@
                 'Gilgit-Baltistan': '#D2691E',
                 'Azad Jammu and Kashmir': '#8A2BE2'
             };
+            
 
             return {
                 fillColor: provinceColors[feature.properties.name] || '#FFFFFF',
