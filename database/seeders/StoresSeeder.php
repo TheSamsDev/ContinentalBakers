@@ -61,13 +61,13 @@ class StoresSeeder extends Seeder
         
         
 
-        foreach ($storeData as $data) {
-            Store::create([
-                'name' => $data[0],
-                'address' => $data[1],
-                'mainaddress' => $data[2],
-                'user_id' => User::inRandomOrder()->first()->id, 
-            ]);
-        }
+        // foreach ($storeData as $data) {
+        //     Store::create([
+        //         'name' => $data[0],
+        //         'address' => $data[1],
+        //         'mainaddress' => $data[2],
+        //         'user_id' => User::inRandomOrder()->first()->id, 
+        //     ]);
+        // }
     }
 }

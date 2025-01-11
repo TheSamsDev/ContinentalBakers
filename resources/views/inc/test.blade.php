@@ -1,15 +1,15 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
-      <div class="col-xxl-8 mb-6 order-0">
+      <div class="col-xxl-12 mb-6 order-0">
         <div class="card">
           <div class="d-flex align-items-start row">
-            
+            <div class="col-12">
             <div id="map" style="width: 100%; height: 500px;"></div>
-
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 order-1">
+      {{-- <div class="col-lg-4 col-md-4 order-1">
         <div class="row">
           <div class="col-lg-6 col-md-12 col-6 mb-6">
             <div class="card h-100">
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- Total Revenue -->
       <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6">
         <div class="card">
