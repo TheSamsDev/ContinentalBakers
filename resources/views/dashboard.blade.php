@@ -7,10 +7,13 @@
 @endsection
 <!-- Include Leaflet.js -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Map Container -->
 
 <script>
+    const storagePath = "{{ asset('storage') }}";
+
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize the map centered on Pakistan
         const map = L.map('map').setView([30.3753, 69.3451], 5);
@@ -39,12 +42,11 @@
                 console.error('Error fetching store data:', error);
             });
 
+        
             
-    });
-    const storagePath = "{{ asset('storage') }}";
 
-    document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('brandDetailsModal');
+      // ---------------------------------------------------------------brandDetailsModal- ---------------------------------------------------->      
+      const modal = document.getElementById('brandDetailsModal');
     modal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         const brandName = button.getAttribute('data-brand');
@@ -111,9 +113,106 @@
     });
 
     });
+
+
+
+          // ---------------------------------------------------------------Chart- ---------------------------------------------------->      
+          const revenueAndOrdersData = @json($revenueAndOrders); // Data from Laravel controller
+
+const storeSelect = document.getElementById('storeSelect');
+const toggleRevenue = document.getElementById('toggleRevenue');
+const toggleOrders = document.getElementById('toggleOrders');
+const toggleBoth = document.getElementById('toggleBoth');
+const chartCanvas = document.getElementById('totalRevenueChart');
+
+let chart;
+let currentDataType = 'both'; // Default to showing both Revenue & Orders
+
+// Function to filter data by store
+function filterDataByStore(storeId) {
+    return revenueAndOrdersData.filter(item => storeId === 0 || item.store_id == storeId);
+}
+
+// Function to update chart based on selected data type (Revenue, Orders, or Both)
+function updateChart(storeId) {
+    const filteredData = filterDataByStore(storeId);
     
-    
+    const months = [...new Set(filteredData.map(item => item.month))];
+    const data = {
+        labels: months.map(month => new Date(0, month - 1).toLocaleString('en', { month: 'short' })),
+        datasets: []
+    };
+
+    // Revenue Dataset
+    if (currentDataType === 'both' || currentDataType === 'revenue') {
+        data.datasets.push({
+            label: 'Revenue',
+            data: months.map(month => {
+                const monthData = filteredData.find(item => item.month == month);
+                return monthData.total_revenue;
+            }),
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 1,
+        });
+    }
+
+    // Orders Dataset
+    if (currentDataType === 'both' || currentDataType === 'orders') {
+        data.datasets.push({
+            label: 'Orders',
+            data: months.map(month => {
+                const monthData = filteredData.find(item => item.month == month);
+                return monthData.total_orders;
+            }),
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgb(255, 99, 132)',
+            borderWidth: 1,
+        });
+    }
+
+    if (chart) {
+        chart.destroy();
+    }
+
+    chart = new Chart(chartCanvas, {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        }
+    });
+}
+
+// Event listeners for toggling between revenue, orders, or both
+toggleRevenue.addEventListener('click', () => {
+    currentDataType = 'revenue';
+    updateChart(storeSelect.value);
 });
+
+toggleOrders.addEventListener('click', () => {
+    currentDataType = 'orders';
+    updateChart(storeSelect.value);
+});
+
+toggleBoth.addEventListener('click', () => {
+    currentDataType = 'both';
+    updateChart(storeSelect.value);
+});
+
+// Event listener for store selection
+storeSelect.addEventListener('change', (e) => {
+    updateChart(e.target.value);
+});
+
+// Initial chart load with all stores and both revenue and orders
+updateChart(0);
+    });
 
 
 </script>

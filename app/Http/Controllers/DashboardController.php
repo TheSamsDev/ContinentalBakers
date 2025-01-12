@@ -6,7 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
-{
+{public function getStoreData(Request $request)
+    {
+        $storeId = $request->store_id;
+    
+        // Query for monthly revenue and order count for the selected store
+        $data =  DB::table('order_product')->where('store_id', $storeId)
+            ->selectRaw('MONTH(created_at) as month, SUM(total_price) as total_revenue, COUNT(id) as total_orders')
+            ->groupByRaw('MONTH(created_at)')
+            ->orderByRaw('MONTH(created_at)')
+            ->get();
+    
+        // Return data as JSON
+        return response()->json($data);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -74,6 +87,23 @@ $allStores = DB::table('stores')
 ->groupBy('stores.id', 'stores.name')  // Added stores.name to GROUP BY
 ->get();
 // dd($allStores);
+
+ // Fetch stores
+ $stores = DB::table('stores')->get();
+
+ // Fetch order and revenue data by month for each store
+ $revenueAndOrders = DB::table('order_product')
+     ->select(
+         DB::raw('MONTH(order_product.created_at) as month'),
+         DB::raw('YEAR(order_product.created_at) as year'),
+         'stores.name as store_name',
+         DB::raw('SUM(order_product.total_price) as total_revenue'),
+         DB::raw('COUNT(order_product.id) as total_orders')
+     )
+     ->join('stores', 'stores.id', '=', 'order_product.store_id')
+     ->groupBy(DB::raw('MONTH(order_product.created_at)'), DB::raw('YEAR(order_product.created_at)'), 'stores.id', 'stores.name')
+     ->orderBy(DB::raw('YEAR(order_product.created_at)'), 'ASC')
+     ->get();
     // Pass data to the view
     return view('dashboard', [
         'topBrands' => $topBrands,
@@ -81,6 +111,8 @@ $allStores = DB::table('stores')
         'topProducts' => $topProducts,
         'topStore' => $topStore,
         'allStores' => $allStores,
+        'stores' => $stores,
+        'revenueAndOrders' => $revenueAndOrders
     ]);
     }
     
