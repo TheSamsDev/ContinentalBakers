@@ -201,7 +201,7 @@
 
     // Add a Geocoder Search Bar
     L.Control.geocoder({
-            geocoder: L.Control.Geocoder.nominatim(), // Use the Nominatim geocoder
+            geocoder: L.Control.Geocoder.nominatim(), 
             defaultMarkGeocode: false,
         })
         .on('markgeocode', function(e) {
@@ -214,25 +214,22 @@
             marker.setLatLng(center).update();
             map.setView(center, 15);
 
-            // Update the latitude and longitude fields
             document.getElementById('latitude').value = center.lat;
             document.getElementById('longitude').value = center.lng;
 
-            // Update the address fields directly from the search result
             document.getElementById('address').value = name;
             document.getElementById('mainAddress').value = name; // Or customize this as needed
         })
         .addTo(map);
 
-        // Reverse Geocode Function for Address when marker is dragged or clicked
         function showLoadingSpinner() {
             const spinner = document.getElementById('spinner');
-            spinner.style.display = 'inline'; // Show the spinner
+            spinner.style.display = 'inline'; 
         }
 
         function hideLoadingSpinner() {
             const spinner = document.getElementById('spinner');
-            spinner.style.display = 'none'; // Hide the spinner
+            spinner.style.display = 'none'; 
         }
 
         function reverseGeocode(lat, lng) {
@@ -263,23 +260,22 @@
                     hideLoadingSpinner();
                 });
         }
+
         // Handle the province change event to adjust map view if needed
         const provinceSelect = document.getElementById('province');
         provinceSelect.addEventListener('change', function() {
-            // Get selected province and adjust the map zoom/center accordingly if needed
             const selectedProvince = provinceSelect.value;
 
-            // Example: adjust map center or zoom based on selected province
             if (selectedProvince === 'Sindh') {
-                map.setView([24.8607, 67.0011], 10); // Karachi as an example
+                map.setView([24.8607, 67.0011], 10); 
             } else if (selectedProvince === 'Punjab') {
-                map.setView([31.5497, 74.3436], 10); // Lahore as an example
+                map.setView([31.5497, 74.3436], 10);
             } else if (selectedProvince === 'KPK') {
-                map.setView([34.0151, 71.5249], 10); // Peshawar as an example
+                map.setView([34.0151, 71.5249], 10); 
             } else if (selectedProvince === 'Balochistan') {
-                map.setView([30.1575, 66.5167], 10); // Quetta as an example
+                map.setView([30.1575, 66.5167], 10); 
             } else if (selectedProvince === 'Azad Jammu & Kashmir') {
-                map.setView([33.6844, 73.0479], 10); // Muzaffarabad as an example
+                map.setView([33.6844, 73.0479], 10);
             }
         });
 
@@ -293,11 +289,9 @@
             // Set the marker position where the user clicked
             marker.setLatLng([lat, lng]);
 
-            // Update the latitude and longitude hidden inputs
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
 
-            // Fetch the address for the clicked location
             reverseGeocode(lat, lng);
         });
 
@@ -310,7 +304,7 @@
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
 
-            reverseGeocode(lat, lng); // Reverse geocode after drag
+            reverseGeocode(lat, lng);
         });
     });
 </script>
