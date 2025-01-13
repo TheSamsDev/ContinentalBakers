@@ -54,7 +54,7 @@ $segment2 = Request::segment(2);
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bold ms-2">sneat</span>
+              <span class="app-brand-text demo menu-text fw-bold ms-2">SavTech Digital</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

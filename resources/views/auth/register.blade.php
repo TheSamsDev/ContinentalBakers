@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-        <title>Demo : Login Basic - Pages | sneat - Bootstrap Dashboard PRO</title>
+        <title>DMS : Savtech Digital</title>
         <meta name="description" content="" />
         <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
@@ -33,16 +33,16 @@
                         <div class="card-body">
                             <!-- Logo -->
                             <div class="app-brand justify-content-center mb-6">
-                                <a href="index.html" class="app-brand-link gap-2">
+                                <a href="{{ url('dashboard') }}" class="app-brand-link gap-2">
                                     <span class="app-brand-logo demo">
                                         <!-- Insert SVG logo here -->
                                     </span>
-                                    <span class="app-brand-text demo text-heading fw-bold">sneat</span>
+                                    <span class="app-brand-text demo text-heading fw-bold">Savtech Digital</span>
                                 </a>
                             </div>
                             <!-- /Logo -->
                             <h4 class="mb-1">Adventure starts here 🚀</h4>
-                            <p class="mb-6">Make your app management easy and fun!</p>
+                            <p class="mb-6">Make your Distribution management easy and fun!</p>
 
                             <!-- Registration Form -->
                             <form method="POST" action="{{ route('register') }}" class="mb-6">

@@ -6,7 +6,7 @@
           name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     
-        <title>Demo : Login Basic - Pages | sneat - Bootstrap Dashboard PRO</title>
+        <title>DMS : Savtech Digital</title>
     
         <meta name="description" content="" />
     
@@ -49,15 +49,15 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <a href="index.html" class="app-brand-link gap-2">
+                            <a href="{{ url('dashboard') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
                                     <!-- Include the SVG or logo here -->
                                 </span>
-                                <span class="app-brand-text demo text-heading fw-bold">sneat</span>
+                                <span class="app-brand-text demo text-heading fw-bold">Savtech Digital</span>
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <h4 class="mb-1">Welcome to sneat! 👋</h4>
+                        <h4 class="mb-1">Welcome to Savtech! 👋</h4>
                         <p class="mb-6">Please sign-in to your account and start the adventure</p>
 
                         <form method="POST" action="{{ route('login') }}">
