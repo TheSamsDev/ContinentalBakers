@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/brands/{id}', [BrandController::class, 'show'])->name('brands.show');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store'); 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
+Route::get('/growth-data', [DashboardController::class, 'getGrowthData']);
+Route::get('/available-years', [DashboardController::class, 'getAvailableYears']);
 
 });
 

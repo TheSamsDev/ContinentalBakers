@@ -100,34 +100,64 @@
                       <canvas id="totalRevenueChart" class="px-3"></canvas>
                   </div>
                   <div class="col-lg-4 d-flex align-items-center">
-                      <div class="card-body px-xl-9">
-                          <div class="text-center mb-6">
-                              <div class="btn-group">
-                                  <button type="button" class="btn btn-outline-primary" id="yearSelect">
-                                      <script>document.write(new Date().getFullYear() - 1);</script>
-                                  </button>
-                                  <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                      <span class="visually-hidden">Toggle Dropdown</span>
-                                  </button>
-                                  <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="javascript:void(0);">2021</a></li>
-                                      <li><a class="dropdown-item" href="javascript:void(0);">2020</a></li>
-                                      <li><a class="dropdown-item" href="javascript:void(0);">2019</a></li>
-                                  </ul>
-                              </div>
-                          </div>
-                          <h6 class="text-center">62% Company Growth</h6>
-      
-                          <!-- Select store dropdown -->
-                          <div class="mt-4">
-                              <select class="form-select" id="storeSelect">
-                                  <option value="0">All Stores</option>
-                                  @foreach($stores as $store)
-                                      <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                  @endforeach
-                              </select>
-                          </div>
+                    <div class="card-body px-xl-9">
+                      <div class="text-center mb-6">
+                        <div class="btn-group">
+                            <button
+                                id="selectedYearButton"
+                                type="button"
+                                class="btn btn-outline-primary">
+                                <!-- Default to current year -->
+                                <script>document.write(new Date().getFullYear());</script>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul id="yearDropdown" class="dropdown-menu">
+                                <!-- Dynamic years will be added here -->
+                            </ul>
+                        </div>
+                        
                       </div>
+                  
+                      <div id="growthChartContainer">
+                        <canvas id="growthChart" style="width: 100%; height: 500px;"> </canvas>
+                      </div>
+                      <div class="text-center fw-medium my-6">
+                        <span id="growthPercentage">0%</span> Company Growth
+                      </div>
+                  
+                      <div class="d-flex gap-3 justify-content-between">
+                        <div class="d-flex">
+                          <div class="avatar me-2">
+                            <span class="avatar-initial rounded-2 bg-label-primary"
+                              ><i class="bx bx-dollar bx-lg text-primary"></i
+                            ></span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <small id="currentYearSalesLabel">{{ date('Y') }}</small>
+
+                            <h6 class="mb-0" id="currentYearSales">$0</h6>
+                          </div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="avatar me-2">
+                            <span class="avatar-initial rounded-2 bg-label-info"
+                              ><i class="bx bx-wallet bx-lg text-info"></i
+                            ></span>
+                          </div>
+                          <div class="d-flex flex-column">
+                            <small id="previousYearSalesLabel">{{ date('Y') - 1 }}</small>
+
+                            <h6 class="mb-0" id="previousYearSales">$0</h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
               </div>
           </div>
@@ -312,29 +342,34 @@
         <div class="col-md-6 col-lg-4 order-1 mb-6">
             <div class="card h-100">
                 <div class="card-header nav-align-top">
-                    <h5 class="card-title m-0 me-2">Top Store </h5>
+                    <h5 class="card-title m-0 me-2">Top  Store </h5>
 
                 </div>
                 <div class="card-body">
                     <div class="tab-content p-0">
                         <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
+                            @foreach ($topStore as $store)
+
                             <div class="d-flex mb-6">
                                 <div class="avatar flex-shrink-0 me-3">
                                     <img src="{{ asset('app-assets/assets/img/icons/unicons/wallet.png') }}"
                                         alt="User" />
                                 </div>
                                 <div>
-                                    <p class="mb-0">{{ $topStore->store_name }}</p>
+                                    <p class="mb-0">{{ $store->store_name ?? 'NO Store' }}</p>
                                     <div class="d-flex align-items-center">
                                         <h6 class="mb-0 me-1">
-                                            ${{ number_format($topStore->total_sales / 1_000_000, 2) }}M</h6>
+                                            ${{ number_format($store->total_sales / 1_000_000, 2) }}M</h6>
                                         <small class="text-success fw-medium">
                                             <i class="bx bx-chevron-up bx-lg"></i>
                                             42.9%
                                         </small>
-                                    </div>
+                                    </div>   
+                                   
                                 </div>
                             </div>
+                            @endforeach
+
                             <h5 class="card-title m-0 me-2">Last Store Order </h5>
                             @foreach ($allStores as $store)
 
