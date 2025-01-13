@@ -219,8 +219,9 @@
                                         data-orders="{{ $brand->total_orders }}"
                                         data-logo="{{ asset('storage/' . $brand->logo) }}"
                                         data-sales="{{ number_format($brand->total_sales / 1_000_000, 2) }}">
-                                        <i class="bx bx-tag"></i>
-                                    </span>
+                                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="User"
+                                        class="avatar" />                                    
+                                      </span>
                                 </div>
                                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                     <div class="me-2">
@@ -281,7 +282,7 @@
         <div class="col-md-6 col-lg-4 order-1 mb-6">
             <div class="card h-100">
                 <div class="card-header nav-align-top">
-                    <h5 class="card-title m-0 me-2">Top  Store </h5>
+                    <h5 class="card-title m-0 me-2">Top Store </h5>
 
                 </div>
                 <div class="card-body">
@@ -291,7 +292,7 @@
 
                             <div class="d-flex mb-6">
                                 <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ asset('app-assets/assets/img/icons/unicons/wallet.png') }}"
+                                    <img src="{{ asset('app-assets/assets/icon/store_icon.png') }}"
                                         alt="User" />
                                 </div>
                                 <div>
@@ -314,8 +315,8 @@
 
                             <div class="d-flex mb-6">
                                 <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ asset('app-assets/assets/img/icons/unicons/wallet.png') }}"
-                                        alt="User" />
+                                  <img src="{{ asset('app-assets/assets/icon/store_icon.png') }}"
+                                  alt="User" />
                                 </div>
                                 <div>
                                   <p class="mb-0">{{ $store->store_name }}</p>

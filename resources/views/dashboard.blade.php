@@ -42,9 +42,9 @@
                     // Custom icon for the store
                     var customIcon = L.icon({
                         iconUrl: '{{ asset('app-assets/assets/icon/store.png') }}',
-                        iconSize: [65, 72], // Custom size
+                        iconSize: [66, 76], // Custom size
                         shadowSize: [80, 80], // Custom shadow size
-                        iconAnchor: [32.5, 72], // Anchor at the bottom center
+                        iconAnchor: [32.8, 65], // Anchor at the bottom center
                         shadowAnchor: [40, 70], // Shadow anchor
                         popupAnchor: [0, -70], // Popup opens above the icon
                     });
@@ -52,6 +52,13 @@
                     // Add a marker for each store with the custom icon
                     const marker = L.marker([latitude, longitude], {
                         icon: customIcon
+                    }).addTo(map);
+
+                    const circle  = L.circle([latitude, longitude], {
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.5,
+                        radius: 500
                     }).addTo(map);
 
                     // Prepare the order details in a formatted string
