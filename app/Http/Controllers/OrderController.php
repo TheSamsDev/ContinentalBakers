@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
     public function store(Request $request)
     {
+        // dd("aa");
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
-            'state' => 'required|string',
             'store_id' => 'required|exists:stores,id',
         ]);
-    
+     
         $product = Product::findOrFail($request->product_id);
-        
+        $order_state=Store::findOrFail($request->store_id);
+        // dd($order_state);
         $order = Order::create([
             'user_id' => auth()->id(),
             'status' => 'confirmed',
@@ -29,7 +31,7 @@ class OrderController extends Controller
             'quantity' => $request->quantity,
             'total_price' => $product->price * $request->quantity,
             'store_id' => $request->store_id, 
-            'state' => $request->state, 
+            'state' => $order_state->state, 
             'order_date' => now(),
         ]);
     

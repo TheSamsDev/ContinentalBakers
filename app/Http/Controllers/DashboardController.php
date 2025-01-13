@@ -10,12 +10,13 @@ class DashboardController extends Controller
 {
     public function getAvailableYears()
 {
+    // dd("Available");
     // Get distinct years from the order_date column
     $years = DB::table('order_product')
         ->select(DB::raw('DISTINCT YEAR(order_date) as year'))
         ->orderByDesc('year')
         ->pluck('year');
-
+//    dd($years);
     // Return years as JSON
     return response()->json($years);
 }

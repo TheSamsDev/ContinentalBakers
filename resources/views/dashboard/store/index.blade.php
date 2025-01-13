@@ -7,8 +7,8 @@
         </button>
 
         <!-- Add Store Modal -->
-        <div class="modal fade" id="addStoreModal" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class= "modal fade" id="addStoreModal" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <form action="{{ route('stores.store') }}" method="POST">
                     @csrf
                     <div class="modal-content">
@@ -17,45 +17,55 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Store Name -->
-                            <div class="mb-3">
-                                <label for="storeName" class="form-label">Store Name</label>
-                                <input type="text" class="form-control" id="storeName" name="name"
-                                    placeholder="e.g Imtiaz Super Market" required>
+                            <div class="row">
+                                <!-- Store Name -->
+                                <div class="col mb-6">
+                                    <label for="storeName" class="form-label">Store Name</label>
+                                    <input type="text" class="form-control" id="storeName" name="name"
+                                        placeholder="e.g Imtiaz Super Market" required>
 
+                                </div>
+                                <!-- Main Address -->
+                                <div class="col mb-6">
+                                    <label for="mainAddress" class="form-label">Main Address</label>
+                                    <input type="text" class="form-control" id="mainAddress" name="mainaddress"
+                                        placeholder="e.g MINI MARKET PH-5" required>
+                                </div>
                             </div>
-                            <!-- Store Address -->
-                            <div class="mb-3" style="position: relative;">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address"
-                                    placeholder="e.g SHOP 1 2..." required>
-                                <span id="spinner" class="fa fa-spinner fa-spin"
-                                    style="display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></span>
+                            <div class="row">
+                                <!-- Store Address -->
+                                <div class="col mb-6" style="position: relative;">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="e.g SHOP 1 2..." required readonly>
+                                    <span id="spinner" class="fa fa-spinner fa-spin"
+                                        style="display: none; position: absolute; right: 22px; top: 56%; transform: translateY(-50%);"></span>
 
-                            </div>
-                            <!-- Main Address -->
-                            <div class="mb-3">
-                                <label for="mainAddress" class="form-label">Main Address</label>
-                                <input type="text" class="form-control" id="mainAddress" name="mainaddress"
-                                    placeholder="e.g MINI MARKET PH-5" required>
+                                </div>
+
+
+                                <!-- Province Selection -->
+                                <div class="col mb-6" style="position: relative;">
+                                    <label for="province" class="form-label">Select Province</label>
+                                    {{-- <select id="province" class="form-control" name="state" required>
+                                        <option value="Sindh">Sindh</option>
+                                        <option value="Punjab">Punjab</option>
+                                        <option value="KPK">KPK</option>
+                                        <option value="Balochistan">Balochistan</option>
+                                        <option value="Azad Jammu & Kashmir">Azad Jammu & Kashmir</option>
+                                    </select> --}}
+                                    <input type="text" value="" class="form-control" required name="state" id="state" readonly>
+                                    <span id="spinner_state" class="fa fa-spinner fa-spin"
+                                    style="display: none; position: absolute; right: 22px; top: 56%; transform: translateY(-50%);"></span>
+
+                                </div>
                             </div>
 
-                            <!-- Province Selection -->
-                            <div class="mb-3">
-                                <label for="province" class="form-label">Select Province</label>
-                                <select id="province" class="form-control" name="state" required>
-                                    <option value="Sindh">Sindh</option>
-                                    <option value="Punjab">Punjab</option>
-                                    <option value="KPK">KPK</option>
-                                    <option value="Balochistan">Balochistan</option>
-                                    <option value="Azad Jammu & Kashmir">Azad Jammu & Kashmir</option>
-                                </select>
-                            </div>
 
                             <!-- Map for Location Selection -->
                             <div class="mb-3">
                                 <label for="map" class="form-label">Select Store Location</label>
-                                <div id="map" style="height: 300px;"></div>
+                                <div id="map_store" style="width: 100%; height: 500px;"></div>
                             </div>
 
                             <!-- Hidden Inputs for Latitude & Longitude -->
@@ -186,50 +196,165 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Map
-    const map = L.map('map').setView([30.3753, 69.3451], 5);
+        const addStoreModal = document.getElementById('addStoreModal');
+        addStoreModal.addEventListener('shown.bs.modal', function () {
 
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 29,
-    }).addTo(map);
+        // Initialize Map
+        const map = L.map('map_store').setView([30.3753, 69.3451], 5);
 
-    // Add a draggable marker
-    const marker = L.marker([30.3753, 69.3451], {
-        draggable: true
-    }).addTo(map);
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
 
-    // Add a Geocoder Search Bar
-    L.Control.geocoder({
-            geocoder: L.Control.Geocoder.nominatim(), 
-            defaultMarkGeocode: false,
-        })
-        .on('markgeocode', function(e) {
-            const {
-                center,
-                name
-            } = e.geocode;
+        // Add a draggable marker
+        const marker = L.marker([30.3753, 69.3451], {
+            draggable: true
+        }).addTo(map);
 
-            // Update marker position and map view
-            marker.setLatLng(center).update();
-            map.setView(center, 15);
+          // Fetch and display store markers
+          fetch('/api/stores')
+            .then(response => response.json())
+            .then(stores => {
+                stores.forEach(store => {
+                    const {
+                        latitude,
+                        longitude,
+                        name,
+                        orders
+                    } = store;
 
-            document.getElementById('latitude').value = center.lat;
-            document.getElementById('longitude').value = center.lng;
+                    // Custom icon for the store
+                    var customIcon = L.icon({
+                        iconUrl: '{{ asset('app-assets/assets/icon/store.png') }}',
+                        iconSize: [65, 72],
+                        shadowSize: [80, 80], 
+                        iconAnchor: [32.5, 72], 
+                        shadowAnchor: [40, 70],
+                        popupAnchor: [0, -70], 
+                    });
 
-            document.getElementById('address').value = name;
-            document.getElementById('mainAddress').value = name; // Or customize this as needed
-        })
-        .addTo(map);
+                    // Add a marker for each store with the custom icon
+                    const marker = L.marker([latitude, longitude], {
+                        icon: customIcon
+                    }).addTo(map);
+
+                    // Prepare the order details in a formatted string
+                    let ordersInfo = `<b>Orders Information:</b><br>`;
+                    // Check if there are any orders
+                    if (orders && orders.length > 0) {
+                        orders.forEach(orderGroup => {
+                            orderGroup.forEach(order => {
+                                ordersInfo += `
+                            <b>Brand:</b> ${order.brand_name}<br>
+                            <b>Quantity:</b> ${order.quantity}<br>
+                            <b>Total Price:</b> ${order.total_price}<br>
+                            <b>Order Date:</b> ${order.order_date}<br>
+                            <b>State:</b> ${order.state}<br><br>
+                        `;
+                            });
+                        });
+                    } else {
+                        // If no orders, show a message
+                        ordersInfo += `<i>No order history available</i><br>`;
+                    }
+                    // Add a popup with the store's name and order information
+                    marker.bindPopup(`
+                <b>${name}</b><br>
+                Latitude: ${latitude}<br>
+                Longitude: ${longitude}<br><br>
+                ${ordersInfo}
+            `);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching store data:', error);
+            });
+
+
+
+        // Province-specific colors
+        const provinceColors = {
+            'Sind': '#B22222',
+            'Punjab': '#FAF0E6',
+            'Baluchistan': '#FFA07A',
+            'K.P.': 'pink',
+            'Azad Kashmir': 'purple',
+            'Northern Areas': '#FFA07A',
+            // 'Islamabad Capital Territory': 'pink',
+        };
+
+        // Load the pk.geojson file from the public directory
+        fetch('{{ asset('pk.json') }}')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(geojsonData => {
+                // Add GeoJSON layer to the map with province-specific styling
+                L.geoJSON(geojsonData, {
+                    style: function(feature) {
+                        // Get the province name
+                        const provinceName = feature.properties.name;
+
+                        // Set the fill color based on the province name
+                        const fillColor = provinceColors[provinceName] ||
+                            'gray';
+
+                        return {
+                            color: '#A9A9A9',
+                            weight: 1,
+                            fillColor: fillColor,
+                            fillOpacity: 0.6,
+                        };
+                    },
+                    // onEachFeature: function(feature, layer) {
+                    //     const name = feature.properties.name ||
+                    //     'Unknown';
+                    //     layer.bindPopup(`<b>${name}</b>`);
+                    // }
+                }).addTo(map);
+            })
+            .catch(error => {
+                console.error('Error loading GeoJSON:', error);
+            });
+        // Add a Geocoder Search Bar
+        L.Control.geocoder({
+                geocoder: L.Control.Geocoder.nominatim(),
+                defaultMarkGeocode: false,
+            })
+            .on('markgeocode', function(e) {
+                const {
+                    center,
+                    name
+                } = e.geocode;
+
+                // Update marker position and map view
+                marker.setLatLng(center).update();
+                map.setView(center, 15);
+
+                document.getElementById('latitude').value = center.lat;
+                document.getElementById('longitude').value = center.lng;
+
+                document.getElementById('address').value = name;
+                document.getElementById('mainAddress').value = name; // Or customize this as needed
+            })
+            .addTo(map);
 
         function showLoadingSpinner() {
             const spinner = document.getElementById('spinner');
-            spinner.style.display = 'inline'; 
+            const spinner_state = document.getElementById('spinner_state');
+            spinner.style.display = 'inline';
+            spinner_state.style.display = 'inline';
         }
 
         function hideLoadingSpinner() {
             const spinner = document.getElementById('spinner');
-            spinner.style.display = 'none'; 
+            const spinner_state = document.getElementById('spinner_state');
+            spinner.style.display = 'none';
+            spinner_state.style.display = 'none';
         }
 
         function reverseGeocode(lat, lng) {
@@ -246,7 +371,10 @@
                     console.log("Reverse geocode response data:", data);
                     if (data && data.address) {
                         const addressData = data.display_name;
+                        const stateData = data.address.state;
                         document.getElementById('address').value = addressData;
+                        document.getElementById('state').value = stateData;
+
                         console.log("Address updated to:", addressData);
                     } else {
                         document.getElementById('address').value = "Address not found";
@@ -261,23 +389,23 @@
                 });
         }
 
-        // Handle the province change event to adjust map view if needed
-        const provinceSelect = document.getElementById('province');
-        provinceSelect.addEventListener('change', function() {
-            const selectedProvince = provinceSelect.value;
+        // // Handle the province change event to adjust map view if needed
+        // const provinceSelect = document.getElementById('province');
+        // provinceSelect.addEventListener('change', function() {
+        //     const selectedProvince = provinceSelect.value;
 
-            if (selectedProvince === 'Sindh') {
-                map.setView([24.8607, 67.0011], 10); 
-            } else if (selectedProvince === 'Punjab') {
-                map.setView([31.5497, 74.3436], 10);
-            } else if (selectedProvince === 'KPK') {
-                map.setView([34.0151, 71.5249], 10); 
-            } else if (selectedProvince === 'Balochistan') {
-                map.setView([30.1575, 66.5167], 10); 
-            } else if (selectedProvince === 'Azad Jammu & Kashmir') {
-                map.setView([33.6844, 73.0479], 10);
-            }
-        });
+        //     if (selectedProvince === 'Sindh') {
+        //         map.setView([24.8607, 67.0011], 10);
+        //     } else if (selectedProvince === 'Punjab') {
+        //         map.setView([31.5497, 74.3436], 10);
+        //     } else if (selectedProvince === 'KPK') {
+        //         map.setView([34.0151, 71.5249], 10);
+        //     } else if (selectedProvince === 'Balochistan') {
+        //         map.setView([30.1575, 66.5167], 10);
+        //     } else if (selectedProvince === 'Azad Jammu & Kashmir') {
+        //         map.setView([33.6844, 73.0479], 10);
+        //     }
+        // });
 
 
 
@@ -306,5 +434,6 @@
 
             reverseGeocode(lat, lng);
         });
+    });
     });
 </script>
