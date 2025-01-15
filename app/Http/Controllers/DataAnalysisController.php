@@ -96,7 +96,7 @@ class DataAnalysisController extends Controller
 
         // Clean up the response to extract the valid SQL query
         $generatedSQL = $response['choices'][0]['message']['content'];
-        dd($generatedSQL);
+        // dd($generatedSQL);
 
         // Clean the response by removing explanatory text
         // Assuming the SQL query starts with "SELECT", you can clean up any extra text before it
