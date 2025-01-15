@@ -1,9 +1,12 @@
 <?php
+
+use App\Http\Controllers\AIController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataAnalysisController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileContoller;
@@ -28,6 +31,13 @@ Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index'); 
 Route::get('/growth-data', [DashboardController::class, 'getGrowthData']);
 Route::get('/available-years', [DashboardController::class, 'getAvailableYears']);
+Route::post('/send-ai-message', [AIController::class, 'sendMessage']);
+//Option 1
+// Route::post('/generate-sql', [DataAnalysisController::class, 'generateSQL']);
+// Route::post('/execute-sql', [DataAnalysisController::class, 'executeSQL']);
+// Route::post('/analyze-data', [DataAnalysisController::class, 'analyzeData']);
+//Option 2
+Route::post('/generate-and-analyze-data', [DataAnalysisController::class, 'generateAndAnalyzeData']);
 
 });
 

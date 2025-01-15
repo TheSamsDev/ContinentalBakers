@@ -32,7 +32,11 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/Helpers/OpenAIHelper.php"
+        ]
+        
     },
     "scripts": {
         "post-autoload-dump": [
