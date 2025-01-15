@@ -229,7 +229,7 @@ async function sendAIMessage() {
 
   // Show a loading spinner
   outputDiv.innerHTML += `<div class="message ai-message" id="loading">
-    <p><em>AI is typing...</em></p>
+    <p><em>Analayzing Data plz wait...</em></p>
   </div>`;
   outputDiv.scrollTop = outputDiv.scrollHeight;
   //Option 1
