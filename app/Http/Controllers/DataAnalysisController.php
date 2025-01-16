@@ -83,7 +83,7 @@ class DataAnalysisController extends Controller
             Given the following database schema:
             
             1. **Users Table**: 
-            - Columns: `id`, `name`, `email`, `phone`, `address`, `state`, `zip_code`, `avatar`, `language`
+            - Columns: `id`, `name`, `email`, `phone`, `zip_code`, `avatar`, `language`
             - Relationships: 
                 - A user has many orders (`orders` table).
                 - A user has many stores (`stores` table).
@@ -190,7 +190,7 @@ class DataAnalysisController extends Controller
             // dd($generatedSQL); // Debugging: Check the raw response
     // Prevent destructive queries
     if (preg_match('/\b(DELETE|DROP|TRUNCATE|ALTER|CREATE|UPDATE|INSERT)\b/i', $generatedSQL)) {
-        return response()->json(['error' => 'Destructive or modifying queries are not allowed'], 400);
+        return response()->json(['error' => 'Destructive or modifying Inputs are not allowed'], 400);
     }
 
             // Clean the response by removing explanatory text
@@ -199,7 +199,7 @@ class DataAnalysisController extends Controller
             } elseif (preg_match('/(SELECT.*?);/is', $generatedSQL, $matches)) {
                 $generatedSQL = $matches[0]; // Extract the entire SQL query
             } else {
-                return response()->json(['error' => 'Generated query is not valid or incomplete SQL'], 400);
+                return response()->json(['error' => 'Sorry, Can You Pls Provide Clear Prompt'], 400);
             }
 
             // Fix the GROUP BY issue dynamically
@@ -239,14 +239,14 @@ class DataAnalysisController extends Controller
                 // Log::error('Query failed: ' . $e->getMessage());
             
                 // Return a user-friendly error message
-                return response()->json(['error' => 'Query failed. Please try again or rephrase your request.'], 400);
+                return response()->json(['error' => 'Analyzing failed. Please try again or rephrase your request.'], 400);
             }
             if (
                 stripos($generatedSQL, 'DELETE') !== false ||
                 stripos($generatedSQL, 'DROP') !== false ||
                 stripos($generatedSQL, 'TRUNCATE') !== false
             ) {
-                return response()->json(['error' => 'Destructive queries are not allowed'], 400);
+                return response()->json(['error' => 'Destructive Inputs are not allowed'], 400);
             }
         }
 

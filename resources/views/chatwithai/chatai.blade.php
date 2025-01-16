@@ -281,7 +281,6 @@
     .message p {
     border-radius: 15px;
     padding: 10px 15px;
-    max-width: 80%;
     word-wrap: break-word;
 }
 
@@ -324,7 +323,6 @@
         display: inline-block;
         padding: 10px 15px;
         border-radius: 15px 15px 0 15px;
-        max-width: 80%;
         word-wrap: break-word;
     }
 
@@ -410,7 +408,7 @@
             <button onclick="sendPrompt(generatePrompt('retailers with most orders'))">Top Retailers</button>
             <button onclick="sendPrompt(generatePrompt('growth from last year'))">Company Growth</button>
             <button onclick="sendPrompt(generatePrompt('top-performing brands'))">Top Brands</button>
-            <button onclick="sendPrompt(generatePrompt('orders by region'))">Orders by Region</button>
+            <button onclick="sendPrompt(generatePrompt('which retailer havent made order'))">Last Order By Retailer</button>
             <button onclick="sendPrompt(generatePrompt('customer details'))">Customer Details</button>
             <button onclick="sendPrompt(generatePrompt('product inventory'))">Product Inventory</button>
             <button onclick="sendPrompt(generatePrompt('recent orders'))">Recent Orders</button>
