@@ -119,30 +119,55 @@ class DataAnalysisController extends Controller
         Generate a valid SQL query for the following request: 
         {$request->input('message')}
         ";
+        // $systemPrompt = '
+        // You are an expert SQL query generator for a MySQL database. 
+        // The database has the following structure:
+
+        // 1. **Products Table**: 
+        //    - Columns: `id`, `name`, `price`
+        //    - Relationships: 
+        //      - A product has many orders through the `order_product` pivot table.
+
+        // 2. **Orders Table**: 
+        //    - Columns: `id`, `user_id`, `status`, `created_at`
+        //    - Relationships: 
+        //      - An order has many products through the `order_product` pivot table.
+
+        // 3. **Stores Table**: 
+        //    - Columns: `id`, `state`
+        //    - Relationships: 
+        //      - A store has many orders through the `order_product` pivot table.
+
+        // 4. **Order_Product Pivot Table**: 
+        //    - Columns: `order_id`, `product_id`, `quantity`, `store_id`
+
+        // Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
+        // ';
         $systemPrompt = '
-        You are an expert SQL query generator for a MySQL database. 
-        The database has the following structure:
-        
-        1. **Products Table**: 
-           - Columns: `id`, `name`, `price`
-           - Relationships: 
-             - A product has many orders through the `order_product` pivot table.
-        
-        2. **Orders Table**: 
-           - Columns: `id`, `user_id`, `status`, `created_at`
-           - Relationships: 
-             - An order has many products through the `order_product` pivot table.
-        
-        3. **Stores Table**: 
-           - Columns: `id`, `state`
-           - Relationships: 
-             - A store has many orders through the `order_product` pivot table.
-        
-        4. **Order_Product Pivot Table**: 
-           - Columns: `order_id`, `product_id`, `quantity`, `store_id`
-        
-        Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
-        ';
+You are an expert SQL query generator for a MySQL database. 
+The database has the following structure:
+
+1. **Products Table**: 
+   - Columns: `id` (INT, PRIMARY KEY), `name` (VARCHAR), `price` (DECIMAL)
+   - Relationships: 
+     - A product has many orders through the `order_product` pivot table.
+
+2. **Orders Table**: 
+   - Columns: `id` (INT, PRIMARY KEY), `user_id` (INT, FOREIGN KEY), `status` (VARCHAR), `created_at` (DATETIME)
+   - Relationships: 
+     - An order belongs to a user (`users` table).
+     - An order has many products through the `order_product` pivot table.
+
+3. **Stores Table**: 
+   - Columns: `id` (INT, PRIMARY KEY), `state` (VARCHAR)
+   - Relationships: 
+     - A store has many orders through the `order_product` pivot table.
+
+4. **Order_Product Pivot Table**: 
+   - Columns: `order_id` (INT, FOREIGN KEY), `product_id` (INT, FOREIGN KEY), `quantity` (INT), `store_id` (INT, FOREIGN KEY)
+
+Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
+';
         $data = [
             'model' => 'gpt-4',
             'messages' => [
@@ -210,7 +235,11 @@ class DataAnalysisController extends Controller
             $results = DB::select($generatedSQL);
             return response()->json(['analysis' => $results]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Query failed: ' . $e->getMessage()], 400);
+            // Log the error
+            // Log::error('Query failed: ' . $e->getMessage());
+        
+            // Return a user-friendly error message
+            return response()->json(['error' => 'Query failed. Please try again or rephrase your request.'], 400);
         }
         if (
             stripos($generatedSQL, 'DELETE') !== false ||

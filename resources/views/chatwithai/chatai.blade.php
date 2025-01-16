@@ -1,11 +1,42 @@
 <style>
+  /* Borderless Table Design */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: none; /* Remove borders */
+}
+
+table th {
+    background-color: #f8f9fa; /* Light gray background for headers */
+    font-weight: 600;
+    color: #333;
+}
+
+table tr {
+    border-bottom: 1px solid #eee; /* Light border between rows */
+}
+
+table tr:last-child {
+    border-bottom: none; /* Remove border for the last row */
+}
+
+table tr:hover {
+    background-color: #f1f1f1; /* Hover effect for rows */
+}
   /* Sidebar Chat Container */
   .ai-chat-sidebar {
       position: fixed;
-      top: 0;
+      bottom: 0;
       right: -400px;
       width: 400px;
-      height: 100vh;
+      height: 90vh;
       background-color: #ffffff;
       box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
       transition: right 0.3s ease-in-out;
@@ -57,8 +88,6 @@
   }
 
   .ai-chat-header .close {
-      color: #fff;
-      font-size: 24px;
       cursor: pointer;
       transition: opacity 0.2s;
   }
@@ -245,9 +274,9 @@
   <!-- Chat Header -->
   <div class="ai-chat-header">
       <div class="ai-chat-header-content">
-          <img src="{{ asset('path/to/agent-avatar.png') }}" alt="Agent Avatar" class="agent-avatar">
+          <img src="{{asset('storage/avatars/Final-Logo0.png')}}" alt="Agent Avatar" class="agent-avatar">
           <div class="agent-info">
-              <h5>Mia Patrick</h5>
+              <h5>Savtech Digital</h5>
               <p>Product Expert</p>
           </div>
       </div>
@@ -258,7 +287,7 @@
   <div id="chat-output" class="ai-chat-output">
       <!-- Welcome Message -->
       <div class="chat-welcome-message">
-          <p>Hi, let us know if you have any questions.</p>
+          <p>Trending Searches</p>
       </div>
 
       <!-- Suggestive Prompts -->
@@ -284,7 +313,7 @@
 
   <!-- Footer -->
   <div class="ai-chat-footer">
-      <p>Powered by <strong>Your Brand</strong></p>
+      <p>Powered by <strong>SAvtech Digital</strong></p>
   </div>
 </div>
 
@@ -397,4 +426,32 @@
       outputDiv.innerHTML += `<div class="message ai-message">
           <p><strong>AI:</strong></p>${table}</div>`;
   }
+//   function displayResults(results) {
+//     const outputDiv = document.getElementById('chat-output');
+
+//     if (!results || results.length === 0) {
+//         outputDiv.innerHTML += `<div class="message ai-message">
+//             <p><strong>AI:</strong> No results found.</p>
+//         </div>`;
+//         return;
+//     }
+
+//     // Convert results to a plain text response
+//     let response = `<div class="message ai-message">
+//         <p><strong>AI:</strong> Here are the results:</p>`;
+
+//     results.forEach((row, index) => {
+//         response += `<p>${index + 1}. `;
+//         response += Object.entries(row).map(([key, value]) => `${key}: ${value}`).join(', ');
+//         response += `</p>`;
+//     });
+
+//     response += `</div>`;
+
+//     // Append the response to the chat output
+//     outputDiv.innerHTML += response;
+
+//     // Scroll to the bottom of the chat
+//     outputDiv.scrollTop = outputDiv.scrollHeight;
+// }
 </script>
