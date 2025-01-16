@@ -74,76 +74,76 @@ class DataAnalysisController extends Controller
 
 
     // Generate SQL, execute it, and analyze data in one flow
-        public function generateAndAnalyzeData(Request $request)
-        {
-            // dd("aa");
-            // Step 1: Generate SQL query from natural language
-            $request->validate(['message' => 'required|string']);
-            $userQuery = "
+    public function generateAndAnalyzeData(Request $request)
+    {
+        // dd("aa");
+        // Step 1: Generate SQL query from natural language
+        $request->validate(['message' => 'required|string']);
+        $userQuery = "
             Given the following database schema:
-            
-            1. **Users Table**: 
-            - Columns: `id`, `name`, `email`, `phone`, `zip_code`, `avatar`, `language`
-            - Relationships: 
-                - A user has many orders (`orders` table).
-                - A user has many stores (`stores` table).
-            
-            2. **Stores Table**: 
-            - Columns: `id`, `name`, `address`, `mainaddress`, `state`, `user_id`, `longitude`, `latitude`
-            - Relationships: 
-                - A store belongs to a user (`users` table).
-                - A store has many orders through the `order_product` pivot table.
-            
-            3. **Products Table**: 
-            - Columns: `id`, `brand_id`, `name`, `image`, `quantity`, `price`
-            - Relationships: 
-                - A product belongs to a brand (`brands` table).
-                - A product has many orders through the `order_product` pivot table.
-            
-            4. **Orders Table**: 
-            - Columns: `id`, `user_id`, `status`
-            - Relationships: 
-                - An order belongs to a user (`users` table).
-                - An order has many products through the `order_product` pivot table.
-            
-            5. **Brands Table**: 
-            - Columns: `id`, `name`, `logo`
-            - Relationships: 
-                - A brand has many products (`products` table).
-            
-            6. **Order_Product Pivot Table**: 
-            - Columns: `order_id`, `product_id`, `quantity`, `total_price`, `brand_id`, `store_id`, `state`, `order_date`
-            - Relationships: 
-                - Connects `orders` and `products` tables.
-            
-            Generate a valid SQL query for the following request: 
-            {$request->input('message')}
+                
+                1. **Users Table**: 
+                - Columns: `id`, `name`, `email`, `phone`, `zip_code`, `avatar`, `language`
+                - Relationships: 
+                    - A user has many orders (`orders` table).
+                    - A user has many stores (`stores` table).
+                
+                2. **Stores Table**: 
+                - Columns: `id`, `name`, `address`, `mainaddress`, `state`, `user_id`, `longitude`, `latitude`
+                - Relationships: 
+                    - A store belongs to a user (`users` table).
+                    - A store has many orders through the `order_product` pivot table.
+                
+                3. **Products Table**: 
+                - Columns: `id`, `brand_id`, `name`, `image`, `quantity`, `price`
+                - Relationships: 
+                    - A product belongs to a brand (`brands` table).
+                    - A product has many orders through the `order_product` pivot table.
+                
+                4. **Orders Table**: 
+                - Columns: `id`, `user_id`, `status`
+                - Relationships: 
+                    - An order belongs to a user (`users` table).
+                    - An order has many products through the `order_product` pivot table.
+                
+                5. **Brands Table**: 
+                - Columns: `id`, `name`, `logo`
+                - Relationships: 
+                    - A brand has many products (`products` table).
+                
+                6. **Order_Product Pivot Table**: 
+                - Columns: `order_id`, `product_id`, `quantity`, `total_price`, `brand_id`, `store_id`, `state`, `order_date`
+                - Relationships: 
+                    - Connects `orders` and `products` tables.
+                
+                Generate a valid SQL query for the following request: 
+                {$request->input('message')}
             ";
-            // $systemPrompt = '
-            // You are an expert SQL query generator for a MySQL database. 
-            // The database has the following structure:
+        // $systemPrompt = '
+        // You are an expert SQL query generator for a MySQL database. 
+        // The database has the following structure:
 
-            // 1. **Products Table**: 
-            //    - Columns: `id`, `name`, `price`
-            //    - Relationships: 
-            //      - A product has many orders through the `order_product` pivot table.
+        // 1. **Products Table**: 
+        //    - Columns: `id`, `name`, `price`
+        //    - Relationships: 
+        //      - A product has many orders through the `order_product` pivot table.
 
-            // 2. **Orders Table**: 
-            //    - Columns: `id`, `user_id`, `status`, `created_at`
-            //    - Relationships: 
-            //      - An order has many products through the `order_product` pivot table.
+        // 2. **Orders Table**: 
+        //    - Columns: `id`, `user_id`, `status`, `created_at`
+        //    - Relationships: 
+        //      - An order has many products through the `order_product` pivot table.
 
-            // 3. **Stores Table**: 
-            //    - Columns: `id`, `state`
-            //    - Relationships: 
-            //      - A store has many orders through the `order_product` pivot table.
+        // 3. **Stores Table**: 
+        //    - Columns: `id`, `state`
+        //    - Relationships: 
+        //      - A store has many orders through the `order_product` pivot table.
 
-            // 4. **Order_Product Pivot Table**: 
-            //    - Columns: `order_id`, `product_id`, `quantity`, `store_id`
+        // 4. **Order_Product Pivot Table**: 
+        //    - Columns: `order_id`, `product_id`, `quantity`, `store_id`
 
-            // Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
-            // ';
-            $systemPrompt = '
+        // Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
+        // ';
+        $systemPrompt = '
     You are an expert SQL query generator for a MySQL database. 
     The database has the following structure:
 
@@ -168,87 +168,78 @@ class DataAnalysisController extends Controller
 
     Always generate valid SQL queries based on the above schema. Do not include any explanations or extra text.
     ';
-            $data = [
-                'model' => 'gpt-4',
-                'messages' => [
-                    ['role' => 'system', 'content' => $systemPrompt],
-                    ['role' => 'user', 'content' => $userQuery]
-                ],
-            ];
-            //    dd($data);
-            // Send request to OpenAI to generate SQL
-            $response = openaiRequest('chat/completions', $data);
-            // dd($response); // Inspect the raw response
+        $data = [
+            'model' => 'gpt-4',
+            'messages' => [
+                ['role' => 'system', 'content' => $systemPrompt],
+                ['role' => 'user', 'content' => $userQuery]
+            ],
+        ];
+        //    dd($data);
+        $response = openaiRequest('chat/completions', $data);
+        // dd($response);
 
-            if (!isset($response['choices'][0]['message']['content'])) {
-                return response()->json(['error' => 'Failed to generate SQL query'], 500);
-            }
+        if (!isset($response['choices'][0]['message']['content'])) {
+            return response()->json(['error' => 'Failed to generate SQL query'], 500);
+        }
 
-            // Clean up the response to extract the valid SQL query
-            // Extract the generated SQL query
-            $generatedSQL = $response['choices'][0]['message']['content'];
-            // dd($generatedSQL); // Debugging: Check the raw response
-    // Prevent destructive queries
-    if (preg_match('/\b(DELETE|DROP|TRUNCATE|ALTER|CREATE|UPDATE|INSERT)\b/i', $generatedSQL)) {
-        return response()->json(['error' => 'Destructive or modifying Inputs are not allowed'], 400);
-    }
+        $generatedSQL = $response['choices'][0]['message']['content'];
+        // dd($generatedSQL); 
+        if (preg_match('/\b(DELETE|DROP|TRUNCATE|ALTER|CREATE|UPDATE|INSERT)\b/i', $generatedSQL)) {
+            return response()->json(['error' => 'Destructive or modifying Inputs are not allowed'], 400);
+        }
 
-            // Clean the response by removing explanatory text
-            if (preg_match('/```sql\s*(SELECT.*?);?\s*```/is', $generatedSQL, $matches)) {
-                $generatedSQL = $matches[1]; // Extract the query inside the ```sql block
-            } elseif (preg_match('/(SELECT.*?);/is', $generatedSQL, $matches)) {
-                $generatedSQL = $matches[0]; // Extract the entire SQL query
-            } else {
-                return response()->json(['error' => 'Sorry, Can You Pls Provide Clear Prompt'], 400);
-            }
+        // Clean the response by removing explanatory text
+        if (preg_match('/```sql\s*(SELECT.*?);?\s*```/is', $generatedSQL, $matches)) {
+            $generatedSQL = $matches[1]; // Extract the query inside the ```sql block
+        } elseif (preg_match('/(SELECT.*?);/is', $generatedSQL, $matches)) {
+            $generatedSQL = $matches[0]; // Extract the entire SQL query
+        } else {
+            return response()->json(['error' => 'Sorry, Can You Pls Provide Clear Prompt'], 400);
+        }
 
-            // Fix the GROUP BY issue dynamically
-            if (strpos($generatedSQL, 'GROUP BY') !== false) {
-                // Extract all non-aggregated columns from the SELECT clause
-                preg_match('/SELECT\s+(.*?)\s+FROM/i', $generatedSQL, $selectMatches);
-                if (isset($selectMatches[1])) {
-                    $selectColumns = array_map('trim', explode(',', $selectMatches[1]));
+        // Fix the GROUP BY issue dynamically
+        if (strpos($generatedSQL, 'GROUP BY') !== false) {
+            // Extract all non-aggregated columns from the SELECT clause
+            preg_match('/SELECT\s+(.*?)\s+FROM/i', $generatedSQL, $selectMatches);
+            if (isset($selectMatches[1])) {
+                $selectColumns = array_map('trim', explode(',', $selectMatches[1]));
 
-                    // Filter out aggregated columns (e.g., SUM, COUNT, AVG, etc.)
-                    $nonAggregatedColumns = [];
-                    foreach ($selectColumns as $column) {
-                        if (!preg_match('/\b(SUM|COUNT|AVG|MIN|MAX)\s*\(/i', $column)) {
-                            // Extract the column name (e.g., "p.name AS product_name" -> "p.name")
-                            preg_match('/([\w\.]+)(\s+AS\s+\w+)?/i', $column, $columnMatches);
-                            if (isset($columnMatches[1])) {
-                                $nonAggregatedColumns[] = $columnMatches[1];
-                            }
+                // Filter out aggregated columns (e.g., SUM, COUNT, AVG, etc.)
+                $nonAggregatedColumns = [];
+                foreach ($selectColumns as $column) {
+                    if (!preg_match('/\b(SUM|COUNT|AVG|MIN|MAX)\s*\(/i', $column)) {
+                        // Extract the column name (e.g., "p.name AS product_name" -> "p.name")
+                        preg_match('/([\w\.]+)(\s+AS\s+\w+)?/i', $column, $columnMatches);
+                        if (isset($columnMatches[1])) {
+                            $nonAggregatedColumns[] = $columnMatches[1];
                         }
                     }
+                }
 
-                    // Add non-aggregated columns to the GROUP BY clause
-                    if (!empty($nonAggregatedColumns)) {
-                        $groupByColumns = implode(', ', $nonAggregatedColumns);
-                        $generatedSQL = preg_replace('/GROUP BY\s+(.*?)(\s+ORDER BY|\s*;)/i', 'GROUP BY $1, ' . $groupByColumns . ' $2', $generatedSQL);
-                    }
+                // Add non-aggregated columns to the GROUP BY clause
+                if (!empty($nonAggregatedColumns)) {
+                    $groupByColumns = implode(', ', $nonAggregatedColumns);
+                    $generatedSQL = preg_replace('/GROUP BY\s+(.*?)(\s+ORDER BY|\s*;)/i', 'GROUP BY $1, ' . $groupByColumns . ' $2', $generatedSQL);
                 }
             }
-
-        
-            // Execute the SQL query
-            try {
-                $results = DB::select($generatedSQL);
-                return response()->json(['analysis' => $results]);
-            } catch (\Exception $e) {
-                // Log the error
-                // Log::error('Query failed: ' . $e->getMessage());
-            
-                // Return a user-friendly error message
-                return response()->json(['error' => 'Analyzing failed. Please try again or rephrase your request.'], 400);
-            }
-            if (
-                stripos($generatedSQL, 'DELETE') !== false ||
-                stripos($generatedSQL, 'DROP') !== false ||
-                stripos($generatedSQL, 'TRUNCATE') !== false
-            ) {
-                return response()->json(['error' => 'Destructive Inputs are not allowed'], 400);
-            }
         }
+
+
+        try {
+            $results = DB::select($generatedSQL);
+            return response()->json(['analysis' => $results]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Analyzing failed. Please try again or rephrase your request.'], 400);
+        }
+        if (
+            stripos($generatedSQL, 'DELETE') !== false ||
+            stripos($generatedSQL, 'DROP') !== false ||
+            stripos($generatedSQL, 'TRUNCATE') !== false
+        ) {
+            return response()->json(['error' => 'Destructive Inputs are not allowed'], 400);
+        }
+    }
 
     //option 3
     // public function generateAndAnalyzeData(Request $request)
