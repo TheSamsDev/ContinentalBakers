@@ -130,10 +130,8 @@
     }
 
     .agent-avatar {
-        width: 50px;
+        /* width: 50px; */
         height: 50px;
-        border-radius: 50%;
-        border: 2px solid #fff;
     }
 
     .agent-info h5 {
@@ -428,7 +426,7 @@
 
     <!-- Footer -->
     <div class="ai-chat-footer">
-        <p>Powered by <strong>SAvtech Digital</strong></p>
+        <p>Powered by <strong>Savtech Digital</strong></p>
     </div>
 </div>
 
