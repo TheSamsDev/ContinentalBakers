@@ -1,4 +1,50 @@
 <style>
+  /* Filters Styling */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filters select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.filters select:hover {
+    border-color: #007bff;
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+#customDateRange {
+    display: none;
+    gap: 10px;
+    align-items: center;
+}
+
+#customDateRange input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+}
+
+#customDateRange input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
   /* Borderless Table Design */
 table {
     width: 100%;
@@ -191,9 +237,9 @@ table tr:hover {
   }
 
   .btn-buy-now {
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
+      background-color: #ff3e1d;
+      color: white !important;
+      border: #ff3e1d;
       padding: 12px 24px;
       border-radius: 25px;
       cursor: pointer;
@@ -266,6 +312,20 @@ table tr:hover {
           transform: rotate(360deg);
       }
   }
+  /* Toggle Button */
+.ai-chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1001;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.ai-chat-toggle.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none; /* Disable clicks when hidden */
+}
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -290,19 +350,29 @@ table tr:hover {
           <p>Trending Searches</p>
       </div>
 
-      <!-- Suggestive Prompts -->
-      <div class="suggestive-prompts">
-          <button onclick="sendPrompt('Show top-selling products this month')">Top Selling Products</button>
-          <button onclick="sendPrompt('Show least sold products this month')">Least Sold Products</button>
-          <button onclick="sendPrompt('Show retailers with most orders')">Top Retailers</button>
-          <button onclick="sendPrompt('Show growth from last year')">Company Growth</button>
-          <button onclick="sendPrompt('Show top-performing brands')">Top Brands</button>
-          <button onclick="sendPrompt('Show orders by region')">Orders by Region</button>
-          <button onclick="sendPrompt('Show customer details')">Customer Details</button>
-          <button onclick="sendPrompt('Show product inventory')">Product Inventory</button>
-          <button onclick="sendPrompt('Show recent orders')">Recent Orders</button>
-          <button onclick="sendPrompt('Show sales trends')">Sales Trends</button>
-      </div>
+      <div class="filters">
+        <!-- Date Filter -->
+        <select id="dateFilter">
+          <option value="this_month">This Month</option>
+            <option value="last_month">Last Month</option>
+            <option value="last_3_months">Last 3 Months</option>
+            <option value="this_year">This Year</option>
+            <option value="last_year">Last Year</option>
+        </select>
+    </div>
+    
+    <div class="suggestive-prompts">
+        <button onclick="sendPrompt(generatePrompt('top-selling products'))">Top Selling Products</button>
+        <button onclick="sendPrompt(generatePrompt('least sold products'))">Least Sold Products</button>
+        <button onclick="sendPrompt(generatePrompt('retailers with most orders'))">Top Retailers</button>
+        <button onclick="sendPrompt(generatePrompt('growth from last year'))">Company Growth</button>
+        <button onclick="sendPrompt(generatePrompt('top-performing brands'))">Top Brands</button>
+        <button onclick="sendPrompt(generatePrompt('orders by region'))">Orders by Region</button>
+        <button onclick="sendPrompt(generatePrompt('customer details'))">Customer Details</button>
+        <button onclick="sendPrompt(generatePrompt('product inventory'))">Product Inventory</button>
+        <button onclick="sendPrompt(generatePrompt('recent orders'))">Recent Orders</button>
+        <button onclick="sendPrompt(generatePrompt('sales trends'))">Sales Trends</button>
+    </div>
   </div>
 
   <!-- Chat Input Container -->
@@ -319,23 +389,38 @@ table tr:hover {
 
 <!-- Button to open the chat sidebar -->
 <div class="ai-chat-toggle">
-  <a class="btn btn-danger btn-buy-now" onclick="toggleChatSidebar()">Chat with AI</a>
+  <a class="btn btn-danger btn-buy-now" onclick="toggleChatSidebar()">
+    Ask AI &nbsp; <i class="fas fa-robot"></i>
+  </a>
 </div>
+
 
 <script>
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  // Toggle the chat sidebar
-  function toggleChatSidebar() {
-      const sidebar = document.getElementById('aiChatSidebar');
-      sidebar.classList.toggle('active');
-  }
+// Toggle the chat sidebar
+function toggleChatSidebar() {
+    const sidebar = document.getElementById('aiChatSidebar');
+    const toggleButton = document.querySelector('.ai-chat-toggle');
 
-  // Close the chat sidebar
-  function closeChatSidebar() {
-      const sidebar = document.getElementById('aiChatSidebar');
-      sidebar.classList.remove('active');
-  }
+    sidebar.classList.toggle('active');
+
+    // Hide the "Ask AI" button when the sidebar is open
+    if (sidebar.classList.contains('active')) {
+        toggleButton.classList.add('hidden');
+    } else {
+        toggleButton.classList.remove('hidden');
+    }
+}
+
+// Close the chat sidebar
+function closeChatSidebar() {
+    const sidebar = document.getElementById('aiChatSidebar');
+    const toggleButton = document.querySelector('.ai-chat-toggle');
+
+    sidebar.classList.remove('active');
+    toggleButton.classList.remove('hidden'); // Show the "Ask AI" button
+}
 
   // Send a predefined prompt
   function sendPrompt(prompt) {
@@ -454,4 +539,42 @@ table tr:hover {
 //     // Scroll to the bottom of the chat
 //     outputDiv.scrollTop = outputDiv.scrollHeight;
 // }
+// Function to generate dynamic prompts
+function generatePrompt(promptType) {
+    const date = document.getElementById('dateFilter').value;
+    const startDate = document.getElementById('startDate')?.value;
+    const endDate = document.getElementById('endDate')?.value;
+
+    let prompt = `Show ${promptType}`;
+
+    // Add date filter
+    switch (date) {
+        case 'this_month':
+            prompt += ' this month';
+            break;
+        case 'last_month':
+            prompt += ' last month';
+            break;
+        case 'last_3_months':
+            prompt += ' in the last 3 months';
+            break;
+        case 'this_year':
+            prompt += ' this year';
+            break;
+        case 'last_year':
+            prompt += ' last year';
+            break;
+    }
+
+    return prompt;
+}
+
+
+// Function to send the generated prompt
+function sendPrompt(prompt) {
+    const inputField = document.getElementById('chat-input');
+    inputField.value = prompt;
+    sendAIMessage(); // Call the function to send the message
+}
+
 </script>
